@@ -1,0 +1,667 @@
+<?php
+
+namespace App\Http\Controllers\Backend;
+
+use App\Authorizable;
+use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
+use App\Models\Setting;
+use App\Models\User;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Laracasts\Flash\Flash;
+use Modules\Clinic\Models\Clinics;
+use Modules\Clinic\Models\ClinicsService;
+use Yajra\DataTables\DataTables;
+use Illuminate\Http\Request;
+
+class BackupController extends Controller
+{
+    // use Authorizable;
+
+    protected $module_title;
+    protected $module_name;
+    protected $module_path;
+    protected $module_model;
+    protected $module_icon;
+
+    public function __construct()
+    {
+        // Page Title
+        $this->module_title = 'backup.title';
+
+        // module name
+        $this->module_name = 'backups';
+
+        // directory path of the module
+        $this->module_path = 'backups';
+
+        // module model name, path
+        $this->module_model = "App\Models\ActivityLog";
+
+        // module icon
+        $this->module_icon = 'fas fa-archive';
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    // public function indexed()
+    // {
+    //     $module_title = $this->module_title;
+    //     $module_name = $this->module_name;
+    //     $module_path = $this->module_path;
+    //     $module_icon = $this->module_icon;
+    //     $module_name_singular = Str::singular($module_name);
+
+    //     $module_action = 'List';
+
+    //     $disk = Storage::disk('local');
+
+    //     $files = $disk->files(config('backup.backup.name'));
+
+    //     $$module_name = [];
+
+    //     // make an array of backup files, with their filesize and creation date
+    //     foreach ($files as $k => $f) {
+    //         // only take the zip files into account
+    //         if (substr($f, -4) == '.zip' && $disk->exists($f)) {
+    //             $$module_name[] = [
+    //                 'file_path' => $f,
+    //                 'file_name' => str_replace(config('backup.backup.name') . '/', '', $f),
+    //                 'file_size_byte' => $disk->size($f),
+    //                 'file_size' => humanFilesize($disk->size($f)),
+    //                 'last_modified_timestamp' => $disk->lastModified($f),
+    //                 'date_created' => Carbon::createFromTimestamp($disk->lastModified($f))->toDateTimeString(),
+    //                 'date_ago' => Carbon::createFromTimestamp($disk->lastModified($f))->diffForHumans(Carbon::now()),
+    //             ];
+    //         }
+    //     }
+
+    //     // reverse the backups, so the newest one would be on top
+    //     $$module_name = array_reverse($$module_name);
+
+    //     return view(
+    //         "backend.$module_path.backups",
+    //         compact('module_title', 'module_name', "$module_name", 'module_path', 'module_icon', 'module_action', 'module_name_singular')
+    //     );
+    // }
+
+    public function index()
+    {
+        $module_title = __('backup.title');
+        $module_name = $this->module_name;
+        $module_icon = $this->module_icon;
+        return view('backend.backups.index_datatable', compact('module_title', 'module_name', 'module_icon'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+public function create()
+{
+    try {
+        $exitCode = Artisan::call('backup:run', [
+            '--verbose' => true,
+            '--disable-notifications' => true,
+        ]);
+
+        $output = trim(Artisan::output());
+
+        if ($exitCode !== 0) {
+            throw new \RuntimeException($output ?: 'Full backup command failed.');
+        }
+
+        Log::info('Full backup completed.', ['output' => $output]);
+
+        return back()->with('success', 'New backup created successfully.');
+    } catch (\Throwable $e) {
+        Log::error('Full backup failed.', ['message' => $e->getMessage()]);
+
+        return back()->with('error', 'Backup failed: ' . $e->getMessage());
+    }
+}
+
+public function createDBBk()
+{
+    try {
+        $exitCode = Artisan::call('backup:run', [
+            '--only-db' => true,
+            '--verbose' => true,
+            '--disable-notifications' => true,
+        ]);
+
+        $output = trim(Artisan::output());
+
+        if ($exitCode !== 0) {
+            throw new \RuntimeException($output ?: 'Database backup command failed.');
+        }
+
+        Log::info('Database backup completed.', ['output' => $output]);
+
+        return back()->with('success', 'Database backup created successfully.');
+    } catch (\Throwable $e) {
+        Log::error('Database backup failed.', ['message' => $e->getMessage()]);
+
+        return back()->with('error', 'Database backup failed: ' . $e->getMessage());
+    }
+}
+
+    /**
+     * Downloads a backup zip file.
+     *
+     * TODO: make it work no matter the flysystem driver (S3 Bucket, etc).
+     */
+
+
+    public function download($file_name)
+    {
+        $file_name = urldecode($file_name); // In case it was URL-encoded
+
+        $file = 'app/' . config('backup.backup.name') . '/' . $file_name;
+        $filePath = storage_path($file);
+
+        if (!file_exists($filePath)) {
+            abort(404, "The backup file doesn't exist.");
+        }
+
+        return response()->streamDownload(function () use ($filePath) {
+            readfile($filePath);
+        }, $file_name, [
+            'Content-Type' => 'application/zip',
+            'Content-Disposition' => 'attachment; filename="' . $file_name . '"',
+        ]);
+    }
+
+    /**
+     * Deletes a backup file.
+     */
+    public function delete($file_name)
+    {
+        $disk = Storage::disk('local');
+        $file = config('backup.backup.name') . '/' . $file_name;
+
+        if ($disk->exists($file)) {
+            $disk->delete($file);
+            $message = __('messages.delete_form', ['form' => __('backup.file')]);
+            return response()->json(['message' => $message, 'status' => true], 200);
+        } else {
+            return response()->json(['message' => __('messages.record_not_found'), 'status' => false], 404);
+        }
+    }
+
+    /**
+     * Restore database from backup file.
+     *
+     * @param string $file_name
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function restore($file_name)
+    {
+        try {
+            $disk = Storage::disk('local');
+            $file = config('backup.backup.name') . '/' . $file_name;
+
+            if (!$disk->exists($file)) {
+                return redirect()->back()->with('error', "The backup file doesn't exist.");
+            }
+
+            // Get the full path to the backup file
+            $backupPath = storage_path('app/' . $file);
+
+            // Get database configuration
+            $dbConfig = config('database.connections.mysql');
+
+            dd($dbConfig);
+            $dbName = $dbConfig['database'];
+            $dbUser = $dbConfig['username'];
+            $dbPass = $dbConfig['password'];
+            $dbHost = $dbConfig['host'];
+            $dbPort = $dbConfig['port'] ?? '3306';
+
+            // Build the mysql command with proper escaping
+            $command = sprintf(
+                'mysql --host=%s --port=%s --user=%s --password=%s %s < %s 2>&1',
+                escapeshellarg($dbHost),
+                escapeshellarg($dbPort),
+                escapeshellarg($dbUser),
+                escapeshellarg($dbPass),
+                escapeshellarg($dbName),
+                escapeshellarg($backupPath)
+            );
+
+            // Execute the command
+            $output = [];
+            $returnVar = null;
+
+            exec($command, $output, $returnVar);
+
+            if ($returnVar !== 0) {
+                $errorOutput = implode("\n", $output);
+                Log::error("Database restore failed (Exit Code: $returnVar): " . $errorOutput);
+
+                // Check if mysql command is available
+                exec('which mysql', $whichOutput, $whichReturn);
+                if ($whichReturn !== 0) {
+                    return redirect()->back()->with('error', 'MySQL client is not installed or not in the system PATH.');
+                }
+
+                return redirect()->back()->with('error', 'Failed to restore database. Check logs for details. Error: ' . $errorOutput);
+            }
+
+            // Clear the application cache
+            Artisan::call('cache:clear');
+            Artisan::call('config:clear');
+            Artisan::call('view:clear');
+
+            // Log the restore action
+            Log::info("Database successfully restored from backup: " . $file_name);
+
+            return redirect()->back()->with('success', 'Database has been successfully restored from backup.');
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            Log::error("Database restore error: " . $errorMessage);
+            return redirect()->back()->with('error', 'An error occurred while restoring the database: ' . $errorMessage);
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function activityLogIndex()
+    {
+        $module_title = __('messages.activity_log');
+        return view('backend.backups.activity_log_index_datatable', compact('module_title'));
+    }
+
+    /**
+     * Datatable endpoint for Activity Logs
+     */
+    public function activity_log_index_data(DataTables $datatable, Request $request)
+    {
+        $query = ActivityLog::query();
+        // Optionally add filters here if needed
+        return $datatable->eloquent($query)
+            ->addColumn('created_at', function ($log) {
+                return $log->created_at ? formatDate($log->created_at)  : '';
+            })
+            ->addColumn('subject_type', function ($log) {
+                return $log->subject_type ?? '-';
+            })
+            ->addColumn('description', function ($log) {
+                return $log->description ?? '-';
+            })
+            ->addColumn('action', function ($log) {
+                return '<a style="cursor:pointer" onclick="getHistory(' . $log->id . ')"><i class="ph ph-eye align-middle text-secondary" data-bs-toggle="tooltip" title="View"></i></a>';
+            })
+            ->editColumn('updated_at', function ($data) {
+
+
+                $diff = Carbon::now()->diffInHours($data->updated_at);
+
+                if ($diff < 25) {
+                    return $data->updated_at->diffForHumans();
+                } else {
+                    return $data->updated_at->isoFormat('llll');
+                }
+            })
+
+            ->rawColumns(['description', 'action'])
+            ->toJson();
+    }
+
+    /**
+     * Datatable endpoint for Backup Files (AJAX, paginated)
+     */
+    public function index_data(Request $request)
+    {
+        $disk = Storage::disk('local');
+        $files = $disk->files(config('backup.backup.name'));
+        $backups = [];
+        foreach ($files as $f) {
+            if (substr($f, -4) == '.zip' && $disk->exists($f)) {
+                $backups[] = [
+                    'file_path' => $f,
+                    'file_name' => str_replace(config('backup.backup.name') . '/', '', $f),
+                    'file_size_byte' => $disk->size($f),
+                    'file_size' => humanFilesize($disk->size($f)),
+                    'last_modified_timestamp' => $disk->lastModified($f),
+                    'date_created' => Carbon::createFromTimestamp($disk->lastModified($f))->toDateTimeString(),
+                    'date_ago' => Carbon::createFromTimestamp($disk->lastModified($f))->diffForHumans(Carbon::now()),
+                ];
+            }
+        }
+        // Sort newest first
+        $backups = array_reverse($backups);
+        // Pagination
+        $perPage = $request->input('length', 10);
+        $start = $request->input('start', 0);
+        $total = count($backups);
+        $paged = array_slice($backups, $start, $perPage);
+        $data = [];
+        foreach ($paged as $key => $backup) {
+            $data[] = [
+                // Show the highest number for the newest (top) row, descending
+                'index' => $total - ($start + $key),
+                'file_name' => $backup['file_name'],
+                'file_size' => $backup['file_size'],
+                'date_created' => formatDate($backup['date_created']),
+                'date_ago' => $backup['date_ago'],
+                'action' => view('backend.backups.partials.action_column', ['backup' => $backup])->render(),
+            ];
+        }
+        return response()->json([
+            'draw' => intval($request->input('draw')),
+            'recordsTotal' => count($backups),
+            'recordsFiltered' => count($backups),
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    // public function activityLogView($id)
+    // {
+
+    //     $html = '';
+    //     $module_title = $this->module_title;
+    //     $module_name = $this->module_name;
+    //     $module_path = $this->module_path;
+    //     $module_icon = $this->module_icon;
+    //     $module_model = $this->module_model;
+    //     $module_name_singular = Str::singular($module_name);
+    //     $$module_name_singular = ActivityLog::where('id', '=', $id)->first();
+    //     if (isset($$module_name_singular) && !empty($$module_name_singular)) {
+    //         $PropertiesData = !empty($$module_name_singular['properties']) ? json_decode($$module_name_singular['properties']) : NULL;
+
+    //         $newData = (isset($PropertiesData->attributes) && !empty($PropertiesData->attributes)) ? $PropertiesData->attributes : NULL;
+    //         $oldData = (isset($PropertiesData->old) && !empty($PropertiesData->old)) ? $PropertiesData->old : NULL;
+
+
+
+    //         $html = '<div class="col-lg-12">';
+    //         $html .= '<div class="row">';
+    //         $html .= '<div class="col-lg-6">';
+    //         $html .= '<h5>' . __('messages.new_data') . ' </h5> <hr>';
+    //         if (!empty($newData)) {
+    //             foreach ($newData as $key => $value) {
+    //                 if ($key == 'user_id' || $key == 'doctor_id' || $key == 'patient_id' || $key == 'otherpatient_id' || $key == 'created_by' || $key == 'updated_by' || $key == 'deleted_by') {
+    //                     $user = User::find($value);
+    //                     $html .= '<p> <span class="h6 m-0">' . ucwords(str_replace('_', ' ', $key)) . '</span> : ' . ($user ? $user->first_name . ' ' . $user->last_name : '-') . '</p>';
+    //                 } elseif ($key == 'reason') {
+
+    //                     $key = 'Cancellation Reason';
+
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . ($value) . '</p>';
+    //                 } elseif ($key == 'clinic_id') {
+    //                     $clinic = Clinics::find($value);
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . ($clinic ? $clinic->name : '-') . '</p>';
+    //                 } elseif ($key == 'service_id') {
+    //                     $service = ClinicsService::find($value);
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . ($service ? $service->name : '-') . '</p>';
+    //                 } elseif ($key == 'created_at' || $key == 'updated_at'  || $key == 'start_date_time') {
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . formatDate($value) . '</p>';
+    //                 } elseif ($key == 'appointment_time') {
+    //                     $setting = Setting::where('name', 'time_formate')->first();
+    //                     $timeformate = $setting ? $setting->val : 'h:i A';
+    //                     $formattedTime = $value ? Carbon::parse($value)->format($timeformate) : '';
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . $formattedTime . '</p>';
+    //                 } elseif ($key == 'appointment_date') {
+    //                     $setting = Setting::where('name', 'date_formate')->first();
+    //                     $dateformate = $setting ? $setting->val : 'Y-m-d';
+    //                     $formattedDate = $value ? Carbon::parse($value)->format($dateformate) : '';
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . $formattedDate . '</p>';
+    //                 } elseif ($key == 'start_video_link' || $key == 'tax_percentage' || $key == 'inclusive_tax') {
+    //                     $html .= '<p class="text-break"> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . $value . '</p>';
+    //                 } else {
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . $value . '</p>';
+    //                 }
+    //             }
+    //         }
+    //         $html .= '</div>';
+    //         $html .= '<div class="col-lg-6">';
+    //         $html .= '<h5>' . __('messages.old_data') . ' </h5> <hr>';
+    //         if (!empty($oldData)) {
+    //             foreach ($oldData as $key => $value) {
+    //                 if ($key == 'user_id' || $key == 'doctor_id' || $key == 'patient_id' || $key == 'otherpatient_id' || $key == 'created_by' || $key == 'updated_by' || $key == 'deleted_by') {
+    //                     $user = User::find($value);
+    //                     $html .= '<p> <span class="h6 m-0">' . ucwords(str_replace('_', ' ', $key)) . '</span> : ' . ($user ? $user->first_name . ' ' . $user->last_name : '-') . '</p>';
+    //                 } elseif ($key == 'clinic_id') {
+    //                     $clinic = Clinics::find($value);
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . ($clinic ? $clinic->name : '-') . '</p>';
+    //                 } elseif ($key == 'service_id') {
+    //                     $service = ClinicsService::find($value);
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . ($service ? $service->name : '-') . '</p>';
+    //                 } elseif ($key == 'created_at' || $key == 'updated_at' || $key == 'start_date_time') {
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . formatDate($value) . '</p>';
+    //                 } elseif ($key == 'appointment_time') {
+    //                     $setting = Setting::where('name', 'time_formate')->first();
+    //                     $timeformate = $setting ? $setting->val : 'h:i A';
+    //                     $formattedTime = $value ? Carbon::parse($value)->format($timeformate) : '';
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . $formattedTime . '</p>';
+    //                 } elseif ($key == 'appointment_date') {
+    //                     $setting = Setting::where('name', 'date_formate')->first();
+    //                     $dateformate = $setting ? $setting->val : 'Y-m-d';
+    //                     $formattedDate = $value ? Carbon::parse($value)->format($dateformate) : '';
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . $formattedDate . '</p>';
+    //                 } elseif ($key == 'start_video_link' || $key == 'tax_percentage') {
+    //                     $html .= '<p class="text-break"> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . $value . '</p>';
+    //                 } else {
+    //                     $html .= '<p> <span class="h6 m-0"> ' . ucwords(str_replace('_', ' ', $key)) . ' </span> : ' . $value . '</p>';
+    //                 }
+    //             }
+    //         }
+    //         $html .= '</div>';
+    //         $html .= '</div>';
+    //         $html .= '</div>';
+    //     }
+
+    //     return $html;
+    // }
+
+     public function activityLogView($id)
+{
+    $activity = ActivityLog::where('id', $id)->first();
+
+    if (!$activity) {
+        return '<div class="alert alert-warning">Activity log not found.</div>';
+    }
+
+    $properties = !empty($activity->properties)
+        ? json_decode($activity->properties)
+        : null;
+
+    $newData = $properties->attributes ?? null;
+    $oldData = $properties->old ?? null;
+
+    $formatLabel = function ($key) {
+        $labels = [
+            'user_id' => 'Patient',
+            'patient_id' => 'Patient',
+            'otherpatient_id' => 'Other Patient',
+            'doctor_id' => 'Doctor',
+            'clinic_id' => 'Clinic',
+            'service_id' => 'Service',
+            'appointment_id' => 'Appointment',
+            'created_by' => 'Created By',
+            'updated_by' => 'Updated By',
+            'deleted_by' => 'Deleted By',
+            'appointment_date' => 'Appointment Date',
+            'appointment_time' => 'Appointment Time',
+            'appointment_extra_info' => 'Medical History',
+            'status' => 'Status',
+            'reason' => 'Cancellation Reason',
+        ];
+
+        return $labels[$key] ?? ucwords(str_replace('_', ' ', $key));
+    };
+
+    $formatValue = function ($key, $value) {
+        if ($value === null || $value === '') {
+            return '-';
+        }
+
+        if (is_array($value) || is_object($value)) {
+            return '<pre class="mb-0 text-break small">' . e(json_encode($value, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) . '</pre>';
+        }
+
+        if (in_array($key, ['user_id', 'patient_id', 'otherpatient_id', 'doctor_id', 'created_by', 'updated_by', 'deleted_by'])) {
+            $user = User::find($value);
+            return $user ? e(trim($user->first_name . ' ' . $user->last_name)) : '-';
+        }
+
+        if ($key === 'nurse_id') {
+            $user = User::find($value);
+            return $user ? e(trim($user->first_name . ' ' . $user->last_name)) : e($value);
+        }
+
+        if ($key === 'clinic_id') {
+            $clinic = Clinics::find($value);
+            return $clinic ? e($clinic->name) : '-';
+        }
+
+        if ($key === 'service_id' || $key === 'redirect_service') {
+            $service = ClinicsService::find($value);
+            return $service ? e($service->name) : e($value);
+        }
+
+        if (in_array($key, ['created_at', 'updated_at', 'deleted_at', 'start_date_time'])) {
+            return $value ? e(formatDate($value)) : '-';
+        }
+
+        if ($key === 'appointment_date') {
+            $setting = Setting::where('name', 'date_formate')->first();
+            $dateformate = $setting ? $setting->val : 'd/m/Y';
+            return $value ? e(Carbon::parse($value)->format($dateformate)) : '-';
+        }
+
+        if ($key === 'appointment_time') {
+            $setting = Setting::where('name', 'time_formate')->first();
+            $timeformate = $setting ? $setting->val : 'h:i A';
+            return $value ? e(Carbon::parse($value)->format($timeformate)) : '-';
+        }
+
+        if (is_bool($value)) {
+            return $value ? 'Yes' : 'No';
+        }
+
+        if ($value === 1 || $value === '1') {
+            return 'Yes';
+        }
+
+        if ($value === 0 || $value === '0') {
+            return 'No';
+        }
+
+        return e((string) $value);
+    };
+
+    $subjectType = class_basename($activity->subject_type ?? '');
+    $subjectId = $activity->subject_id ?? null;
+    $causer = $activity->causer ?? null;
+
+    $actorName = '-';
+    if ($causer) {
+        $actorName = trim(($causer->first_name ?? '') . ' ' . ($causer->last_name ?? '')) ?: ($causer->name ?? '-');
+    } elseif (!empty($newData->updated_by ?? null)) {
+        $user = User::find($newData->updated_by);
+        $actorName = $user ? trim($user->first_name . ' ' . $user->last_name) : '-';
+    } elseif (!empty($newData->created_by ?? null)) {
+        $user = User::find($newData->created_by);
+        $actorName = $user ? trim($user->first_name . ' ' . $user->last_name) : '-';
+    }
+
+    $changedData = [];
+
+    if (!empty($newData)) {
+        foreach ($newData as $key => $newValue) {
+            $oldValue = $oldData->{$key} ?? null;
+
+            $newCompare = is_array($newValue) || is_object($newValue) ? json_encode($newValue) : (string) $newValue;
+            $oldCompare = is_array($oldValue) || is_object($oldValue) ? json_encode($oldValue) : (string) $oldValue;
+
+            if ($oldCompare !== $newCompare) {
+                $changedData[$key] = [
+                    'old' => $oldValue,
+                    'new' => $newValue,
+                ];
+            }
+        }
+    }
+
+    $html = '<div class="col-lg-12">';
+
+    $html .= '<div class="alert alert-light border mb-4">';
+    $html .= '<h5 class="mb-2">Activity Summary</h5>';
+    $html .= '<p class="mb-1"><strong>User:</strong> ' . e($actorName) . '</p>';
+    $html .= '<p class="mb-1"><strong>Action:</strong> ' . e(ucwords(str_replace('_', ' ', $activity->description ?? '-'))) . '</p>';
+    $html .= '<p class="mb-1"><strong>Record:</strong> ' . e($subjectType ?: '-') . ($subjectId ? ' #' . e($subjectId) : '') . '</p>';
+    $html .= '<p class="mb-0"><strong>Time:</strong> ' . e(formatDate($activity->created_at)) . '</p>';
+    $html .= '</div>';
+
+    if (!empty($changedData)) {
+        $html .= '<div class="card mb-4">';
+        $html .= '<div class="card-header"><h5 class="mb-0">Changed Fields</h5></div>';
+        $html .= '<div class="card-body">';
+
+        foreach ($changedData as $key => $change) {
+            $html .= '<div class="mb-3 pb-3 border-bottom">';
+            $html .= '<div class="fw-bold mb-1">' . e($formatLabel($key)) . '</div>';
+            $html .= '<div class="row">';
+            $html .= '<div class="col-md-6"><small class="text-muted">Old</small><div class="text-danger">' . $formatValue($key, $change['old']) . '</div></div>';
+            $html .= '<div class="col-md-6"><small class="text-muted">New</small><div class="text-success">' . $formatValue($key, $change['new']) . '</div></div>';
+            $html .= '</div>';
+            $html .= '</div>';
+        }
+
+        $html .= '</div>';
+        $html .= '</div>';
+    } else {
+        $html .= '<div class="alert alert-info">No changed fields were found for this activity.</div>';
+    }
+
+    $html .= '<details class="mt-3">';
+    $html .= '<summary class="fw-bold">Show full technical data</summary>';
+    $html .= '<div class="row mt-3">';
+
+    $html .= '<div class="col-lg-6">';
+    $html .= '<h5>' . __('messages.new_data') . '</h5><hr>';
+    if (!empty($newData)) {
+        foreach ($newData as $key => $value) {
+            $html .= '<p class="text-break"><span class="h6 m-0">' . e($formatLabel($key)) . '</span> : ' . $formatValue($key, $value) . '</p>';
+        }
+    }
+    $html .= '</div>';
+
+    $html .= '<div class="col-lg-6">';
+    $html .= '<h5>' . __('messages.old_data') . '</h5><hr>';
+    if (!empty($oldData)) {
+        foreach ($oldData as $key => $value) {
+            $html .= '<p class="text-break"><span class="h6 m-0">' . e($formatLabel($key)) . '</span> : ' . $formatValue($key, $value) . '</p>';
+        }
+    }
+    $html .= '</div>';
+
+    $html .= '</div>';
+    $html .= '</details>';
+
+    $html .= '</div>';
+
+    return $html;
+    }
+}
