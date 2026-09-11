@@ -89,6 +89,25 @@ Route::group(['middleware' => ['auth','user_check']], function () {
     // Patient Dashboard Routes - Protected with patient-specific authentication and data access middleware
     Route::group(['middleware' => ['patient_auth', 'patient_data']], function () {
         Route::get('/patient-dashboard', [PatientDashboardController::class, 'index'])->name('patient.dashboard');
+
+          Route::view('/patient/triage', 'frontend::patient_section', [
+            'pageTitle' => 'Triage',
+            'pageIcon' => 'ph-stethoscope',
+            'endpointRoute' => 'patient.dashboard.triage',
+        ])->name('patient.pages.triage');
+        
+        Route::view('/patient/prescriptions', 'frontend::patient_section', [
+            'pageTitle' => 'Prescriptions',
+            'pageIcon' => 'ph-pill',
+            'endpointRoute' => 'patient.dashboard.prescriptions',
+        ])->name('patient.pages.prescriptions');
+        
+        Route::view('/patient/appointments', 'frontend::patient_section', [
+            'pageTitle' => 'Appointments',
+            'pageIcon' => 'ph-calendar-dots',
+            'endpointRoute' => 'patient.dashboard.appointments',
+        ])->name('patient.pages.appointments');
+        
         Route::get('/patient/dashboard/appointments', [PatientDashboardController::class, 'appointments'])->name('patient.dashboard.appointments');
         Route::get('/patient/dashboard/prescriptions', [PatientDashboardController::class, 'prescriptions'])->name('patient.dashboard.prescriptions');
         Route::get('/patient/dashboard/triage', [PatientDashboardController::class, 'triageRecords'])->name('patient.dashboard.triage');
