@@ -215,6 +215,186 @@ a:hover { color: #b82c28 !important; } */
     --bs-secondary-color-rgb: 33, 37, 41 !important;
 }
 
+/* Full-height patient layout: footer follows long content,
+   and sits at the bottom when content is short. */
+body.patient-dashboard-container {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.patient-dashboard-container > header {
+    flex-shrink: 0;
+}
+
+.patient-dashboard-container > main.patient-content {
+    flex: 1 0 auto;
+    width: 100%;
+    min-width: 0;
+    padding: clamp(16px, 2vw, 32px);
+}
+
+.patient-dashboard-container > footer.minimal-footer {
+    position: static !important;
+    inset: auto !important;
+    flex-shrink: 0;
+    width: 100%;
+    margin-top: auto !important;
+}
+
+/* Desktop header */
+.patient-dashboard-container .landing-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+}
+
+.patient-dashboard-container .right-panel {
+    margin-inline-start: auto;
+    min-width: 0;
+}
+
+.patient-header-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.patient-header-menu .patient-header-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    color: #343a40;
+    text-decoration: none;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.patient-header-menu .patient-header-link span {
+    color: inherit !important;
+}
+
+.patient-header-menu .patient-header-link img {
+    display: block;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    object-fit: contain;
+}
+
+.patient-header-menu .patient-header-link:hover {
+    background: #fff1f0;
+    color: #b82c28;
+}
+
+.patient-header-menu .patient-header-link.is-active {
+    background: #e63732;
+    color: #fff !important;
+}
+
+.patient-header-menu .patient-header-link:focus-visible {
+    outline: 3px solid #e63732;
+    outline-offset: 3px;
+}
+
+/* Dashboard tabs wrap instead of overflowing */
+.patient-dashboard-container .patient-overview-tab {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.patient-dashboard-container .patient-overview-tab .nav-link {
+    margin: 0;
+}
+
+.patient-dashboard-container .patient-overview-tab .nav-link.active,
+.patient-dashboard-container .patient-overview-tab .nav-link.active span,
+.patient-dashboard-container .patient-overview-tab .nav-link.active i {
+    color: #fff !important;
+}
+
+/* Footer content can wrap on smaller screens */
+.patient-dashboard-container .minimal-footer .contact-info {
+    flex-wrap: wrap;
+}
+
+.patient-dashboard-container .minimal-footer a {
+    overflow-wrap: anywhere;
+}
+
+/* Tablet: navigation gets its own row */
+@media (max-width: 1399.98px) {
+    .patient-header-menu {
+        order: 3;
+        flex: 0 0 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        padding: 6px 0 10px;
+    }
+}
+
+/* Phones */
+@media (max-width: 575.98px) {
+    .patient-header-menu {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .patient-header-menu .patient-header-link {
+        justify-content: flex-start;
+        padding: 10px;
+        font-size: 13px;
+        white-space: normal;
+    }
+
+    .patient-dashboard-container .patient-overview-tab .nav-item {
+        flex: 1 1 calc(50% - 8px);
+        min-width: 0;
+    }
+
+    .patient-dashboard-container .patient-overview-tab .nav-link {
+        width: 100%;
+        padding: 10px;
+        white-space: normal;
+    }
+
+    .patient-dashboard-container .minimal-footer .row {
+        row-gap: 12px;
+    }
+
+    #patient-section-records .card-body > .row {
+        row-gap: 12px;
+    }
+
+    #patient-section-records .text-end {
+        text-align: start !important;
+    }
+}
+
+/* White status text and icons on patient pages */
+.patient-dashboard-container .patient-content .badge,
+.patient-dashboard-container .patient-content .badge span,
+.patient-dashboard-container .patient-content .badge i {
+    color: #fff !important;
+}
+/* White text for medical-record service badges */
+body.patient-dashboard-container .badge.bg-info,
+body.patient-dashboard-container .badge.bg-info span,
+body.patient-dashboard-container .badge.bg-info i {
+    color: #fff !important;
+}
 
     </style>
 </head>
@@ -243,8 +423,8 @@ a:hover { color: #b82c28 !important; } */
         $currentRoute = Route::currentRouteName();
         
         // Check if current page should show footer
-        $showFooter = in_array($currentRoute, $pagesWithFooter);
-        
+$showFooter = in_array($currentRoute, $pagesWithFooter)
+    || request()->routeIs('patient.pages.*', 'patient.blood-tests*');        
         // Also check by URL path as fallback for dynamic routes
         if (!$showFooter) {
             $currentPath = request()->path();
@@ -281,6 +461,8 @@ a:hover { color: #b82c28 !important; } */
     <script src="{{ mix('modules/frontend/script.js') }}"></script>
     <script src="{{ mix('js/backend-custom.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+
+    
     
     <script>
         const currencyFormat = (amount) => {
@@ -296,7 +478,36 @@ a:hover { color: #b82c28 !important; } */
         window.defaultCurrencySymbol = @json(Currency::defaultSymbol())
     </script>
     
+    <script>
+        // Notification dropdown — load list when Bootstrap opens it
+        document.addEventListener('DOMContentLoaded', function () {
+            var notificationWrapper = document.querySelector('.dropdown-notification-wrapper');
+            if (notificationWrapper) {
+                notificationWrapper.addEventListener('show.bs.dropdown', function () {
+                    notificationList();
+                });
+            }
+        });
+
+        function notificationList(type) {
+            type = type || '';
+            var url = "{{ route('notification.list') }}";
+            $.ajax({
+                type: 'get',
+                url: url,
+                data: { type: type },
+                success: function (res) {
+                    $('.notification_data').html(res.data);
+                    if (res.type === 'markas_read') {
+                        notificationList();
+                    }
+                }
+            });
+        }
+    </script>
+
     @stack('after-scripts')
+
 </body>
 
 </html>
