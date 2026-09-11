@@ -8,12 +8,76 @@
                 </div>
 
                 <!-- Simplified Navigation for Patients -->
-                <div class="d-flex align-items-center gap-3">
+                <!-- <div class="d-flex align-items-center gap-3"> -->
                     <!-- Home Link -->
-                    <a href="{{ route('patient.dashboard') }}" class="nav-link text-decoration-none">
+                    <!-- <a href="{{ route('patient.dashboard') }}" class="nav-link text-decoration-none">
                         <i class="ph ph-house me-2"></i>{{ __('frontend.home') }}
                     </a>
-                </div>
+                </div> -->
+
+                @php
+    $patientMenu = [
+    [
+        'label' => 'Home',
+        'route' => 'patient.dashboard',
+        'image' => 'img/crm-icons/dashboard.png',
+    ],
+    [
+        'label' => 'Triage',
+        'route' => 'patient.pages.triage',
+        'image' => 'img/crm-icons/triage.png',
+    ],
+    [
+        'label' => 'Prescriptions',
+        'route' => 'patient.pages.prescriptions',
+        'image' => 'img/crm-icons/medical-encounter.png',
+    ],
+    [
+        'label' => 'Appointments',
+        'route' => 'patient.pages.appointments',
+        'image' => 'img/crm-icons/appointments.png',
+    ],
+    [
+        'label' => 'Blood Tests',
+        'route' => 'patient.blood-tests',
+        'image' => 'img/crm-icons/blood-tests.png',
+    ],
+];
+@endphp
+
+<div class="patient-header-menu" aria-label="Patient navigation">
+    @foreach($patientMenu as $item)
+        @php
+            $active = request()->routeIs($item['route']);
+
+            if ($item['route'] === 'patient.pages.appointments') {
+                $active = $active || request()->routeIs(
+                    'appointment-list',
+                    'appointment-details'
+                );
+            }
+
+            if ($item['route'] === 'patient.pages.triage') {
+                $active = $active || request()->routeIs('encounter-list');
+            }
+        @endphp
+
+        <a href="{{ route($item['route']) }}"
+           class="patient-header-link {{ $active ? 'is-active' : '' }}"
+           @if($active) aria-current="page" @endif>
+            @if(isset($item['image']))
+                <img src="{{ asset($item['image']) }}"
+                     width="22"
+                     height="22"
+                     alt="">
+            @else
+                <i class="ph {{ $item['icon'] }}" aria-hidden="true"></i>
+            @endif
+
+            <span>{{ $item['label'] }}</span>
+        </a>
+    @endforeach
+</div>
 
                 <div class="right-panel">
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
