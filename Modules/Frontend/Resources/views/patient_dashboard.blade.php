@@ -31,6 +31,29 @@
     border-color: var(--bs-primary);
 }
 
+    /* Keep active patient-dashboard tab content white */
+.patient-dashboard-container .patient-overview-tab .nav-link.active,
+.patient-dashboard-container .patient-overview-tab .nav-link.active span,
+.patient-dashboard-container .patient-overview-tab .nav-link.active i,
+.patient-dashboard-container .patient-overview-tab .nav-link.active svg {
+    color: #fff !important;
+}
+
+/* Keep coloured appointment / triage status labels readable */
+.patient-dashboard-container .badge.bg-primary,
+.patient-dashboard-container .badge.bg-success,
+.patient-dashboard-container .badge.bg-warning,
+.patient-dashboard-container .badge.bg-danger,
+.patient-dashboard-container .badge.bg-secondary,
+.patient-dashboard-container .btn.bg-primary,
+.patient-dashboard-container .btn.bg-success,
+.patient-dashboard-container .btn.bg-warning,
+.patient-dashboard-container .btn.bg-danger,
+.patient-dashboard-container .btn.bg-secondary,
+.patient-dashboard-container .btn-danger {
+    color: #fff !important;
+}
+
 .patient-overview-tab .nav-link i {
     margin-right: 8px;
     font-size: 1.1em;
