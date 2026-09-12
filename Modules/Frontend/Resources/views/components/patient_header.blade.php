@@ -18,7 +18,7 @@
                 @php
     $patientMenu = [
     [
-        ''label' => __('frontend.home'),
+        'label' => __('frontend.home'),
         'route' => 'patient.dashboard',
         'image' => 'img/crm-icons/dashboard.png',
     ],
