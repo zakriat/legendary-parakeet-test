@@ -358,7 +358,7 @@
         <!-- Triage Tab -->
         <div class="tab-pane fade" id="triage" role="tabpanel" aria-labelledby="triage-tab" tabindex="0">
             <div class="card">
-                <div class="card-header">
+                <!-- <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <h5 class="mb-0">{{ __('frontend.my_triage_records') }}</h5>
@@ -372,7 +372,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
+                    <div class="card-header">
+                        <h5 class="mb-0">{{ __('frontend.my_triage_records') }}</h5>
+                    </div>
+                
                 <div class="card-body">
                     <div id="triage-content">
                         <div class="text-center py-4">
@@ -388,7 +392,7 @@
         <!-- Prescriptions Tab -->
         <div class="tab-pane fade" id="prescriptions" role="tabpanel" aria-labelledby="prescriptions-tab" tabindex="0">
             <div class="card">
-                <div class="card-header">
+                <!-- <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <h5 class="mb-0">{{ __('frontend.my_prescriptions') }}</h5>
@@ -399,7 +403,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                    </div> -->
+                        <div class="card-header">
+                            <h5 class="mb-0">{{ __('frontend.my_prescriptions') }}</h5>
+                        </div>
+                    
                 <div class="card-body">
                     <div id="prescriptions-content">
                         <div class="text-center py-4">
@@ -415,7 +423,7 @@
         <!-- Appointments Tab -->
         <div class="tab-pane fade" id="appointments" role="tabpanel" aria-labelledby="appointments-tab" tabindex="0">
             <div class="card">
-                <div class="card-header">
+                <!-- <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <h5 class="mb-0">{{ __('frontend.my_appointments') }}</h5>
@@ -426,7 +434,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
+    
+                    <div class="card-header">
+                        <h5 class="mb-0">{{ __('frontend.my_appointments') }}</h5>
+                    </div>
                 <div class="card-body">
                     <div id="appointments-content">
                         <div class="text-center py-4">
@@ -595,34 +607,5 @@ function loadMedicalRecords() {
         });
 }
 
-// Search functionality
-document.addEventListener('DOMContentLoaded', function() {
-    // Triage search
-    const triageSearch = document.getElementById('triage-search');
-    if (triageSearch) {
-        triageSearch.addEventListener('input', function() {
-            // Implement search functionality
-            console.log('Searching triage:', this.value);
-        });
-    }
-    
-    // Prescriptions search
-    const prescriptionsSearch = document.getElementById('prescriptions-search');
-    if (prescriptionsSearch) {
-        prescriptionsSearch.addEventListener('input', function() {
-            // Implement search functionality
-            console.log('Searching prescriptions:', this.value);
-        });
-    }
-    
-    // Appointments search
-    const appointmentsSearch = document.getElementById('appointments-search');
-    if (appointmentsSearch) {
-        appointmentsSearch.addEventListener('input', function() {
-            // Implement search functionality
-            console.log('Searching appointments:', this.value);
-        });
-    }
-});
 </script>
 @endpush
