@@ -38,7 +38,7 @@
         'image' => 'img/crm-icons/appointments.png',
     ],
     [
-        ''label' => __('frontend.blood_tests'),
+        'label' => __('frontend.blood_tests'),
         'route' => 'patient.blood-tests',
         'image' => 'img/crm-icons/blood-tests.png',
     ],
