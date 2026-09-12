@@ -198,7 +198,7 @@ return[
 'wallet_deducted' => 'تم خصم المحفظة',
 'incidence' => 'تقرير الحوادث',
     'no_services_available' => 'لا توجد خدمات متاحة',
-    'no_services_message' => 'لا يتوفر لدى هذا الطبيب حاليًا أي خدمات للحجز.'
+    'no_services_message' => 'لا يتوفر لدى هذا الطبيب حاليًا أي خدمات للحجز.',
 
 
 
