@@ -358,21 +358,7 @@
         <!-- Triage Tab -->
         <div class="tab-pane fade" id="triage" role="tabpanel" aria-labelledby="triage-tab" tabindex="0">
             <div class="card">
-                <!-- <div class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <h5 class="mb-0">{{ __('frontend.my_triage_records') }}</h5>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex gap-2 justify-content-md-end">
-                                <input type="text" class="form-control form-control-sm" id="triage-search" placeholder="{{ __('frontend.search_triage') }}...">
-                                <button class="btn btn-sm btn-outline-primary" id="triage-filter-btn">
-                                    <i class="ph ph-funnel"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
+
                     <div class="card-header">
                         <h5 class="mb-0">{{ __('frontend.my_triage_records') }}</h5>
                     </div>
@@ -392,18 +378,7 @@
         <!-- Prescriptions Tab -->
         <div class="tab-pane fade" id="prescriptions" role="tabpanel" aria-labelledby="prescriptions-tab" tabindex="0">
             <div class="card">
-                <!-- <div class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <h5 class="mb-0">{{ __('frontend.my_prescriptions') }}</h5>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex gap-2 justify-content-md-end">
-                                <input type="text" class="form-control form-control-sm" id="prescriptions-search" placeholder="{{ __('frontend.search_prescriptions') }}...">
-                            </div>
-                        </div>
-                    </div>
-                    </div> -->
+               
                         <div class="card-header">
                             <h5 class="mb-0">{{ __('frontend.my_prescriptions') }}</h5>
                         </div>
@@ -423,19 +398,7 @@
         <!-- Appointments Tab -->
         <div class="tab-pane fade" id="appointments" role="tabpanel" aria-labelledby="appointments-tab" tabindex="0">
             <div class="card">
-                <!-- <div class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <h5 class="mb-0">{{ __('frontend.my_appointments') }}</h5>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="d-flex gap-2 justify-content-md-end">
-                                <input type="text" class="form-control form-control-sm" id="appointments-search" placeholder="{{ __('frontend.search_appointments') }}...">
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-    
+            
                     <div class="card-header">
                         <h5 class="mb-0">{{ __('frontend.my_appointments') }}</h5>
                     </div>
