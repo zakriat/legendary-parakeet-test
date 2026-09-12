@@ -304,5 +304,7 @@ return[
 'are_you_sure_logout' => 'Are you sure you want to logout?',
 'logout_confirmation_message' => 'Confirmation Message',
 
+'book_blood_test' => 'Book Blood Test',
+
 
 ];
