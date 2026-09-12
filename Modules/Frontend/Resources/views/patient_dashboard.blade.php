@@ -140,7 +140,7 @@
                     <a href="https://www.cosmodoctors.com/booking/?patient_id={{ auth()->id() }}&first={{ urlencode(auth()->user()->first_name) }}&last={{ urlencode(auth()->user()->last_name) }}&email={{ urlencode(auth()->user()->email) }}&phone={{ urlencode(auth()->user()->phone ?? '') }}" 
                        target="_blank" 
                        class="btn btn-danger">
-                        <i class="ph ph-test-tube me-2"></i>🩸 Book Blood Test
+                        <i class="ph ph-test-tube me-2"></i> {{ __('frontend.book_blood_test') }}
                     </a>
                 </div>
             </div>
