@@ -18,27 +18,27 @@
                 @php
     $patientMenu = [
     [
-        'label' => 'Home',
+        ''label' => __('frontend.home'),
         'route' => 'patient.dashboard',
         'image' => 'img/crm-icons/dashboard.png',
     ],
     [
-        'label' => 'Triage',
+        'label' => __('frontend.triage'),
         'route' => 'patient.pages.triage',
         'image' => 'img/crm-icons/triage.png',
     ],
     [
-        'label' => 'Prescriptions',
+        'label' => __('frontend.prescriptions'),
         'route' => 'patient.pages.prescriptions',
         'image' => 'img/crm-icons/medical-encounter.png',
     ],
     [
-        'label' => 'Appointments',
+       'label' => __('frontend.appointments'),
         'route' => 'patient.pages.appointments',
         'image' => 'img/crm-icons/appointments.png',
     ],
     [
-        'label' => 'Blood Tests',
+        ''label' => __('frontend.blood_tests'),
         'route' => 'patient.blood-tests',
         'image' => 'img/crm-icons/blood-tests.png',
     ],
