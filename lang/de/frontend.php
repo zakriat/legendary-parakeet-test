@@ -229,4 +229,17 @@ return[
 'not_provided' => 'Nicht angegeben',
 'blood_tests' => 'Blutuntersuchungen',
 'book_blood_test' => 'Blutuntersuchung buchen',
+
+
+    'my_appointments' => 'My Appointments',
+'no_recent_triage' => 'No recent triage records',
+'no_appointments' => 'No appointments',
+'no_prescriptions' => 'No prescriptions',
+'no_triage_records' => 'No triage records',
+'no_medical_records' => 'No medical records',
+'error_loading_data' => 'Unable to load your records',
+'loading' => 'Loading',
+'not_provided' => 'Not provided',
+'blood_tests' => 'Blood Tests',
+'book_blood_test' => 'Book Blood Test',
 ];
