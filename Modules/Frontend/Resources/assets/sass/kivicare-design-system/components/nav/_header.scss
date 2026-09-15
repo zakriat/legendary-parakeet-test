@@ -134,7 +134,9 @@ header {
           border-radius: 50%;
           font-size: 0.75rem;
           line-height: 17px;
-          color: var(--bs-white);
+          // color: var(--bs-white);
+          color: #ffffff !important;   // was: color: var(--bs-white);
+          font-weight: 600;  
         }
       }
       &.iq-dropdown {
