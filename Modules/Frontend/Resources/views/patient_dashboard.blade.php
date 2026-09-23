@@ -272,6 +272,42 @@ html[data-bs-theme="dark"] .patient-dashboard-container .patient-content,
 html[data-bs-theme="dark"] .patient-dashboard-container .patient-main-content {
     background-color: #15161b !important;
 }
+
+    /* writing color */
+
+    /* Welcome message only */
+.patient-dashboard-container .welcome-banner h2,
+.patient-dashboard-container .welcome-banner p {
+    color: #ffffff !important;
+}
+
+/* Dashboard activity data: dark text on light cards */
+.patient-dashboard-container #recent-triage-content,
+.patient-dashboard-container #recent-prescriptions-content,
+.patient-dashboard-container #upcoming-appointments-content {
+    color: #111827 !important;
+}
+
+.patient-dashboard-container #recent-triage-content .card,
+.patient-dashboard-container #recent-prescriptions-content .card,
+.patient-dashboard-container #upcoming-appointments-content .card {
+    background: #f8f9fa !important;
+    color: #111827 !important;
+    border-color: #dee2e6 !important;
+}
+
+.patient-dashboard-container #recent-triage-content .card *,
+.patient-dashboard-container #recent-prescriptions-content .card *,
+.patient-dashboard-container #upcoming-appointments-content .card * {
+    color: #111827 !important;
+}
+
+/* Keep colored status badges readable */
+.patient-dashboard-container #recent-triage-content .badge,
+.patient-dashboard-container #recent-prescriptions-content .badge,
+.patient-dashboard-container #upcoming-appointments-content .badge {
+    color: #ffffff !important;
+}
 </style>
 @endpush
 
