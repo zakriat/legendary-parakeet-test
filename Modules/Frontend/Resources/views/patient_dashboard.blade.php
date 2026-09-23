@@ -247,7 +247,31 @@ html[data-bs-theme="dark"] .stats-card .stats-icon svg {
 .patient-overview-tab .nav-link.active * {
     color: #ffffff !important;
 }
-    
+    /* light mode fixed */
+
+    /* Dark-mode patient page background */
+html[data-bs-theme="dark"] .patient-dashboard-container {
+    background-color: #15161b !important;
+}
+
+/* Dark-mode statistic cards */
+html[data-bs-theme="dark"] .patient-dashboard-container .stats-card {
+    background-color: #202127 !important;
+    border: 1px solid #343740 !important;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 25%) !important;
+}
+
+/* Keep statistic numbers and labels readable */
+html[data-bs-theme="dark"] .patient-dashboard-container .stats-card h3,
+html[data-bs-theme="dark"] .patient-dashboard-container .stats-card p {
+    color: #e2e8f0 !important;
+}
+
+/* Darken the area behind the dashboard content */
+html[data-bs-theme="dark"] .patient-dashboard-container .patient-content,
+html[data-bs-theme="dark"] .patient-dashboard-container .patient-main-content {
+    background-color: #15161b !important;
+}
 </style>
 @endpush
 
