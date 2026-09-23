@@ -469,7 +469,120 @@ html[data-bs-theme="light"] body .text-secondary {
     color: #ffffff !important;
 }
 
-        
+        /* dark mode fix */
+        /* Patient pages: darken the page and content areas */
+html[data-bs-theme="dark"] body.patient-dashboard-container,
+html[data-bs-theme="dark"] body.patient-dashboard-container .patient-content,
+html[data-bs-theme="dark"] body.patient-dashboard-container main,
+html[data-bs-theme="dark"] body.patient-dashboard-container .list-page,
+html[data-bs-theme="dark"] body.patient-dashboard-container .movie-lists {
+    background-color: #15161b !important;
+    color: #e2e8f0 !important;
+}
+
+/* Breadcrumb and section panels */
+html[data-bs-theme="dark"] body.patient-dashboard-container .section-bg,
+html[data-bs-theme="dark"] body.patient-dashboard-container .breadcrumb,
+html[data-bs-theme="dark"] body.patient-dashboard-container .breadcrumb-section {
+    background-color: #202127 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Appointment cards override their inline pale background */
+html[data-bs-theme="dark"] body.patient-dashboard-container .appointments-card {
+    background: #202127 !important;
+    color: #e2e8f0 !important;
+    border-color: #444956 !important;
+}
+
+html[data-bs-theme="dark"] body.patient-dashboard-container .appointments-card p,
+html[data-bs-theme="dark"] body.patient-dashboard-container .appointments-card span,
+html[data-bs-theme="dark"] body.patient-dashboard-container .appointments-card li,
+html[data-bs-theme="dark"] body.patient-dashboard-container .appointments-card h1,
+html[data-bs-theme="dark"] body.patient-dashboard-container .appointments-card h2,
+html[data-bs-theme="dark"] body.patient-dashboard-container .appointments-card h3,
+html[data-bs-theme="dark"] body.patient-dashboard-container .appointments-card h4,
+html[data-bs-theme="dark"] body.patient-dashboard-container .appointments-card h5,
+html[data-bs-theme="dark"] body.patient-dashboard-container .appointments-card h6 {
+    color: #e2e8f0 !important;
+}
+
+/* Services cards and other patient content cards */
+html[data-bs-theme="dark"] body.patient-dashboard-container .services-card,
+html[data-bs-theme="dark"] body.patient-dashboard-container .encounters-card,
+html[data-bs-theme="dark"] body.patient-dashboard-container .incidence-card,
+html[data-bs-theme="dark"] body.patient-dashboard-container .notification-card,
+html[data-bs-theme="dark"] body.patient-dashboard-container .wallet-detail,
+html[data-bs-theme="dark"] body.patient-dashboard-container .card,
+html[data-bs-theme="dark"] body.patient-dashboard-container .modal-content {
+    background-color: #202127 !important;
+    color: #e2e8f0 !important;
+    border-color: #3b404c !important;
+}
+
+/* Patient page text and labels */
+html[data-bs-theme="dark"] body.patient-dashboard-container .services-card *,
+html[data-bs-theme="dark"] body.patient-dashboard-container .encounters-card *,
+html[data-bs-theme="dark"] body.patient-dashboard-container .incidence-card *,
+html[data-bs-theme="dark"] body.patient-dashboard-container .notification-card *,
+html[data-bs-theme="dark"] body.patient-dashboard-container .wallet-detail *,
+html[data-bs-theme="dark"] body.patient-dashboard-container .appointments-card * {
+    color: #e2e8f0 !important;
+}
+
+/* Inputs and filters */
+html[data-bs-theme="dark"] body.patient-dashboard-container .form-control,
+html[data-bs-theme="dark"] body.patient-dashboard-container .form-select,
+html[data-bs-theme="dark"] body.patient-dashboard-container select,
+html[data-bs-theme="dark"] body.patient-dashboard-container textarea,
+html[data-bs-theme="dark"] body.patient-dashboard-container input {
+    background-color: #202127 !important;
+    color: #f1f5f9 !important;
+    border-color: #454b59 !important;
+}
+
+html[data-bs-theme="dark"] body.patient-dashboard-container .select2-container--default
+.select2-selection--single,
+html[data-bs-theme="dark"] body.patient-dashboard-container .select2-dropdown,
+html[data-bs-theme="dark"] body.patient-dashboard-container .select2-results__option {
+    background-color: #202127 !important;
+    color: #f1f5f9 !important;
+    border-color: #454b59 !important;
+}
+
+html[data-bs-theme="dark"] body.patient-dashboard-container
+.select2-container--default .select2-results__option--highlighted {
+    background-color: #354052 !important;
+    color: #ffffff !important;
+}
+
+/* Profile icon dropdown */
+html[data-bs-theme="dark"] body.patient-dashboard-container .dropdown-user-menu,
+html[data-bs-theme="dark"] body.patient-dashboard-container .dropdown-user-menu .user-fields,
+html[data-bs-theme="dark"] body.patient-dashboard-container .dropdown-user-menu .border-bottom {
+    background-color: #202127 !important;
+    border-color: #454b59 !important;
+    color: #e2e8f0 !important;
+}
+
+html[data-bs-theme="dark"] body.patient-dashboard-container .dropdown-user-menu h6,
+html[data-bs-theme="dark"] body.patient-dashboard-container .dropdown-user-menu small,
+html[data-bs-theme="dark"] body.patient-dashboard-container .dropdown-user-menu span,
+html[data-bs-theme="dark"] body.patient-dashboard-container .dropdown-user-menu a {
+    color: #e2e8f0 !important;
+}
+
+html[data-bs-theme="dark"] body.patient-dashboard-container .dropdown-user-menu .user-droup-down-img {
+    background-color: #15161b !important;
+}
+
+/* Keep colored badges and action buttons readable */
+html[data-bs-theme="dark"] body.patient-dashboard-container .badge,
+html[data-bs-theme="dark"] body.patient-dashboard-container .btn-primary,
+html[data-bs-theme="dark"] body.patient-dashboard-container .btn-danger,
+html[data-bs-theme="dark"] body.patient-dashboard-container .btn-success {
+    color: #ffffff !important;
+}
     </style>
 </head>
 
