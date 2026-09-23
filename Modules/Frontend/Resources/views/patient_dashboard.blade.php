@@ -120,6 +120,58 @@
         font-size: 1.2rem;
     }
 }
+
+    /* Patient dashboard text on the dark information panel */
+.patient-dashboard-container > .card,
+.patient-dashboard-container > .card .card-body {
+    color: #e2e8f0;
+}
+
+.patient-dashboard-container > .card h4,
+.patient-dashboard-container > .card h5,
+.patient-dashboard-container > .card p,
+.patient-dashboard-container > .card span,
+.patient-dashboard-container > .card small,
+.patient-dashboard-container > .card .text-muted,
+.patient-dashboard-container > .card .text-secondary,
+.patient-dashboard-container > .card .text-heading {
+    color: #dbe3ee !important;
+}
+
+/* White profile information strip */
+.patient-dashboard-container > .card .bg-body,
+.patient-dashboard-container > .card .bg-body h4,
+.patient-dashboard-container > .card .bg-body span,
+.patient-dashboard-container > .card .bg-body i {
+    color: #212529 !important;
+}
+
+/* Dark cards inside Recent Triage, Prescriptions, and Appointments */
+.patient-dashboard-container > .card .card {
+    color: #e2e8f0;
+}
+
+.patient-dashboard-container > .card .card .card-header,
+.patient-dashboard-container > .card .card .card-body,
+.patient-dashboard-container > .card .card .card-header h5,
+.patient-dashboard-container > .card .card .card-body p,
+.patient-dashboard-container > .card .card .card-body span,
+.patient-dashboard-container > .card .card .card-body small {
+    color: #dbe3ee !important;
+}
+
+/* Keep colored status labels and active tab legible */
+.patient-dashboard-container .badge,
+.patient-dashboard-container .patient-overview-tab .nav-link.active,
+.patient-dashboard-container .patient-overview-tab .nav-link.active * {
+    color: #ffffff !important;
+}
+
+/* Dark tab backgrounds */
+.patient-dashboard-container > .card {
+    background-color: #202127;
+    border-color: #343740;
+}
 </style>
 @endpush
 
