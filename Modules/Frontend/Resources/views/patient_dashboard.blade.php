@@ -172,6 +172,37 @@
     background-color: #202127;
     border-color: #343740;
 }
+
+/* dark moode fixes */
+
+    /* Patient navigation: readable inactive tabs */
+.patient-overview-tab .nav-link:not(.active),
+.patient-overview-tab .nav-link:not(.active) span,
+.patient-overview-tab .nav-link:not(.active) i,
+.patient-overview-tab .nav-link:not(.active) svg {
+    color: #e2e8f0 !important;
+    opacity: 1 !important;
+}
+
+/* Keep hover state readable */
+.patient-overview-tab .nav-link:not(.active):hover,
+.patient-overview-tab .nav-link:not(.active):hover span,
+.patient-overview-tab .nav-link:not(.active):hover i {
+    color: #ffffff !important;
+}
+
+/* Brighten icons inside the four statistics cards */
+.stats-card .stats-icon i,
+.stats-card .stats-icon svg {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* Keep stat labels and numbers readable */
+.stats-card h3,
+.stats-card p {
+    color: #212529 !important;
+}
 </style>
 @endpush
 
