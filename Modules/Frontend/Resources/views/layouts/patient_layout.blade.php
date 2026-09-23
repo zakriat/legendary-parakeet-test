@@ -583,6 +583,56 @@ html[data-bs-theme="dark"] body.patient-dashboard-container .btn-danger,
 html[data-bs-theme="dark"] body.patient-dashboard-container .btn-success {
     color: #ffffff !important;
 }
+
+
+
+        /* pages font color */
+
+        /* Dark mode: readable patient records on appointments, prescriptions, and triage */
+html[data-bs-theme="dark"] #patient-section-records .card,
+html[data-bs-theme="dark"] #patient-section-records .card-body {
+    background-color: #f8f9fa !important;
+    border-color: #d8dee8 !important;
+    color: #111827 !important;
+}
+
+html[data-bs-theme="dark"] #patient-section-records .card *,
+html[data-bs-theme="dark"] #patient-section-records table *,
+html[data-bs-theme="dark"] #patient-section-records .text-muted,
+html[data-bs-theme="dark"] #patient-section-records .text-secondary {
+    color: #111827 !important;
+}
+
+/* Keep status badges legible on their colored backgrounds */
+html[data-bs-theme="dark"] #patient-section-records .badge,
+html[data-bs-theme="dark"] #patient-section-records .badge * {
+    color: #ffffff !important;
+}
+
+/* Dark mode: brighten the patient header navigation labels */
+html[data-bs-theme="dark"] .patient-header-menu .patient-header-link:not(.is-active),
+html[data-bs-theme="dark"] .patient-header-menu .patient-header-link:not(.is-active) span {
+    color: #f1f5f9 !important;
+}
+
+html[data-bs-theme="dark"] .patient-header-menu .patient-header-link:not(.is-active):hover,
+html[data-bs-theme="dark"] .patient-header-menu .patient-header-link:not(.is-active):hover span {
+    color: #ffffff !important;
+}
+
+/* Dark mode: make the dashboard Edit Profile button visible */
+html[data-bs-theme="dark"] .patient-dashboard-container .btn-outline-secondary {
+    color: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    background-color: #292c35 !important;
+}
+
+html[data-bs-theme="dark"] .patient-dashboard-container .btn-outline-secondary:hover,
+html[data-bs-theme="dark"] .patient-dashboard-container .btn-outline-secondary:focus {
+    color: #ffffff !important;
+    border-color: #e63732 !important;
+    background-color: #e63732 !important;
+}
     </style>
 </head>
 
