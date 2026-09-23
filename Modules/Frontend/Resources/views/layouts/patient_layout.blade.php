@@ -138,9 +138,10 @@
         ── Brand colours + dark text for patient pages ──
 
 
-   
+   /* dark moode fixes */
+
         
-.card-header .row.align-items-center,
+/* .card-header .row.align-items-center,
 .card-header .row.align-items-center * {
     color: #212529 !important;
 }
@@ -150,8 +151,10 @@ body, p, span, label, td, th, h1, h2, h3, h4, h5, h6, li, small {
 }
 .text-muted, .text-secondary {
     color: #212529  !important;
-}
+} */
 
+/* dark moode fixes */
+        
 /* Stats card labels */
 .stats-card p {
     color: #212529  !important;
@@ -171,14 +174,19 @@ body, p, span, label, td, th, h1, h2, h3, h4, h5, h6, li, small {
     --bs-primary-rgb: 230, 55, 50;
 }
 
-body {
+        /* dark moode fixes */
+
+/* body {
     color: #212529 !important;
-}
+} */
 
 /* All general text dark */
-p, span, label, td, th, li, small, .text-muted {
+        
+/* p, span, label, td, th, li, small, .text-muted {
     color: #212529 !important;
-}
+} */
+
+        /* dark moode fixes */
 
 /* .btn.bs-primary — the blood test button class */
 /* .btn.bs-primary {
@@ -208,12 +216,18 @@ p, span, label, td, th, li, small, .text-muted {
 a { color: #E63732 !important; }
 a:hover { color: #b82c28 !important; } */
 
-:root {
+/* dark moode fixes */
+
+        
+/* :root {
     --bs-body-color: #212529 !important;
     --bs-body-color-rgb: 33, 37, 41 !important;
     --bs-secondary-color: #212529 !important;
     --bs-secondary-color-rgb: 33, 37, 41 !important;
-}
+} */
+
+        /* dark moode fixes */
+
 
 /* Full-height patient layout: footer follows long content,
    and sits at the bottom when content is short. */
@@ -396,6 +410,66 @@ body.patient-dashboard-container .badge.bg-info i {
     color: #fff !important;
 }
 
+/* dark moode fixes */
+
+        /* Default patient page text: light theme */
+html[data-bs-theme="light"] body,
+html[data-bs-theme="light"] body p,
+html[data-bs-theme="light"] body span,
+html[data-bs-theme="light"] body label,
+html[data-bs-theme="light"] body td,
+html[data-bs-theme="light"] body th,
+html[data-bs-theme="light"] body h1,
+html[data-bs-theme="light"] body h2,
+html[data-bs-theme="light"] body h3,
+html[data-bs-theme="light"] body h4,
+html[data-bs-theme="light"] body h5,
+html[data-bs-theme="light"] body h6,
+html[data-bs-theme="light"] body li,
+html[data-bs-theme="light"] body small,
+html[data-bs-theme="light"] body .text-muted,
+html[data-bs-theme="light"] body .text-secondary {
+    color: #212529 !important;
+}
+
+/* Patient dashboard main panel */
+.patient-dashboard-container > .card {
+    background: #1d1e26 !important;
+    color: #e2e8f0 !important;
+    border-color: #343740 !important;
+}
+
+.patient-dashboard-container > .card h4,
+.patient-dashboard-container > .card h5,
+.patient-dashboard-container > .card p,
+.patient-dashboard-container > .card span,
+.patient-dashboard-container > .card small,
+.patient-dashboard-container > .card .text-muted,
+.patient-dashboard-container > .card .text-secondary,
+.patient-dashboard-container > .card .text-heading {
+    color: #dbe3ee !important;
+}
+
+/* Profile strip remains light with dark text */
+.patient-dashboard-container > .card .bg-body,
+.patient-dashboard-container > .card .bg-body * {
+    color: #212529 !important;
+}
+
+/* Stats cards retain their light backgrounds and dark text */
+.patient-dashboard-container .stats-card,
+.patient-dashboard-container .stats-card * {
+    color: #212529 !important;
+}
+
+/* Keep status badges and active tab labels readable */
+.patient-dashboard-container .badge,
+.patient-dashboard-container .patient-overview-tab .nav-link.active,
+.patient-dashboard-container .patient-overview-tab .nav-link.active * {
+    color: #ffffff !important;
+}
+
+        
     </style>
 </head>
 
