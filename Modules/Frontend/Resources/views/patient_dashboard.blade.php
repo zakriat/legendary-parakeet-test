@@ -309,38 +309,48 @@ html[data-bs-theme="dark"] .patient-dashboard-container .patient-main-content {
     color: #ffffff !important;
 }
 
-/* Dashboard activity data: dark text on light cards */
-.patient-dashboard-container #recent-triage-content,
-.patient-dashboard-container #recent-prescriptions-content,
-.patient-dashboard-container #upcoming-appointments-content {
-    color: #111827 !important;
+/* Dark mode: keep the Overview activity cards dark */
+html[data-bs-theme="dark"] #recent-triage-content,
+html[data-bs-theme="dark"] #recent-prescriptions-content,
+html[data-bs-theme="dark"] #upcoming-appointments-content,
+html[data-bs-theme="dark"] #triage-content,
+html[data-bs-theme="dark"] #prescriptions-content,
+html[data-bs-theme="dark"] #appointments-content {
+    color: #f1f5f9 !important;
 }
 
-.patient-dashboard-container #recent-triage-content .card,
-.patient-dashboard-container #recent-prescriptions-content .card,
-.patient-dashboard-container #upcoming-appointments-content .card {
-    background: #f8f9fa !important;
-    color: #111827 !important;
-    border-color: #dee2e6 !important;
+/* Dark backgrounds for cards and data rows loaded into these areas */
+html[data-bs-theme="dark"] #recent-triage-content .card,
+html[data-bs-theme="dark"] #recent-prescriptions-content .card,
+html[data-bs-theme="dark"] #upcoming-appointments-content .card,
+html[data-bs-theme="dark"] #triage-content .card,
+html[data-bs-theme="dark"] #prescriptions-content .card,
+html[data-bs-theme="dark"] #appointments-content .card,
+html[data-bs-theme="dark"] #triage-content > *,
+html[data-bs-theme="dark"] #prescriptions-content > *,
+html[data-bs-theme="dark"] #appointments-content > * {
+    background-color: #202127 !important;
+    color: #f1f5f9 !important;
+    border-color: #3b404c !important;
 }
 
-.patient-dashboard-container #recent-triage-content .card *,
-.patient-dashboard-container #recent-prescriptions-content .card *,
-.patient-dashboard-container #upcoming-appointments-content .card * {
-    color: #111827 !important;
+/* Override muted gray text inside loaded data */
+html[data-bs-theme="dark"] #recent-triage-content *,
+html[data-bs-theme="dark"] #recent-prescriptions-content *,
+html[data-bs-theme="dark"] #upcoming-appointments-content *,
+html[data-bs-theme="dark"] #triage-content *,
+html[data-bs-theme="dark"] #prescriptions-content *,
+html[data-bs-theme="dark"] #appointments-content * {
+    color: #f1f5f9 !important;
 }
 
-/* Keep colored status badges readable */
-.patient-dashboard-container #recent-triage-content .badge,
-.patient-dashboard-container #recent-prescriptions-content .badge,
-.patient-dashboard-container #upcoming-appointments-content .badge {
-    color: #ffffff !important;
-}
-
-/* Keep colored status badges readable */
-.patient-dashboard-container #recent-triage-content .badge,
-.patient-dashboard-container #recent-prescriptions-content .badge,
-.patient-dashboard-container #upcoming-appointments-content .badge {
+/* Preserve white text on colored status badges */
+html[data-bs-theme="dark"] #recent-triage-content .badge,
+html[data-bs-theme="dark"] #recent-prescriptions-content .badge,
+html[data-bs-theme="dark"] #upcoming-appointments-content .badge,
+html[data-bs-theme="dark"] #triage-content .badge,
+html[data-bs-theme="dark"] #prescriptions-content .badge,
+html[data-bs-theme="dark"] #appointments-content .badge {
     color: #ffffff !important;
 }
 </style>
