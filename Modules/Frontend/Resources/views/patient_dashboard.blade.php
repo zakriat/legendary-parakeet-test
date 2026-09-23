@@ -396,6 +396,78 @@ html[data-bs-theme="dark"] #prescriptions-content .badge,
 html[data-bs-theme="dark"] #appointments-content .badge {
     color: #ffffff !important;
 }
+
+
+    /* badges text color */
+
+    /* High-contrast badges in Overview and dashboard tabs */
+html[data-bs-theme="light"] .patient-dashboard-container #recent-triage-content .badge,
+html[data-bs-theme="light"] .patient-dashboard-container #recent-prescriptions-content .badge,
+html[data-bs-theme="light"] .patient-dashboard-container #upcoming-appointments-content .badge,
+html[data-bs-theme="light"] .patient-dashboard-container #triage-content .badge,
+html[data-bs-theme="light"] .patient-dashboard-container #prescriptions-content .badge,
+html[data-bs-theme="light"] .patient-dashboard-container #appointments-content .badge,
+html[data-bs-theme="dark"] .patient-dashboard-container #recent-triage-content .badge,
+html[data-bs-theme="dark"] .patient-dashboard-container #recent-prescriptions-content .badge,
+html[data-bs-theme="dark"] .patient-dashboard-container #upcoming-appointments-content .badge,
+html[data-bs-theme="dark"] .patient-dashboard-container #triage-content .badge,
+html[data-bs-theme="dark"] .patient-dashboard-container #prescriptions-content .badge,
+html[data-bs-theme="dark"] .patient-dashboard-container #appointments-content .badge {
+    display: inline-block;
+    padding: 0.35rem 0.65rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    line-height: 1.4 !important;
+    opacity: 1 !important;
+}
+
+/* White text on darker status colors */
+html[data-bs-theme] .patient-dashboard-container #recent-triage-content .badge.bg-success,
+html[data-bs-theme] .patient-dashboard-container #recent-triage-content .badge.bg-danger,
+html[data-bs-theme] .patient-dashboard-container #recent-triage-content .badge.bg-info,
+html[data-bs-theme] .patient-dashboard-container #recent-triage-content .badge.bg-primary,
+html[data-bs-theme] .patient-dashboard-container #recent-triage-content .badge.bg-secondary,
+html[data-bs-theme] .patient-dashboard-container #appointments-content .badge.bg-success,
+html[data-bs-theme] .patient-dashboard-container #appointments-content .badge.bg-danger,
+html[data-bs-theme] .patient-dashboard-container #appointments-content .badge.bg-info,
+html[data-bs-theme] .patient-dashboard-container #appointments-content .badge.bg-primary,
+html[data-bs-theme] .patient-dashboard-container #appointments-content .badge.bg-secondary {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+html[data-bs-theme] .patient-dashboard-container #recent-triage-content .badge.bg-success,
+html[data-bs-theme] .patient-dashboard-container #appointments-content .badge.bg-success {
+    background-color: #146c43 !important;
+}
+
+html[data-bs-theme] .patient-dashboard-container #recent-triage-content .badge.bg-danger,
+html[data-bs-theme] .patient-dashboard-container #appointments-content .badge.bg-danger {
+    background-color: #b02a37 !important;
+}
+
+html[data-bs-theme] .patient-dashboard-container #recent-triage-content .badge.bg-info,
+html[data-bs-theme] .patient-dashboard-container #appointments-content .badge.bg-info {
+    background-color: #087990 !important;
+}
+
+html[data-bs-theme] .patient-dashboard-container #recent-triage-content .badge.bg-primary,
+html[data-bs-theme] .patient-dashboard-container #appointments-content .badge.bg-primary {
+    background-color: #0a58ca !important;
+}
+
+html[data-bs-theme] .patient-dashboard-container #recent-triage-content .badge.bg-secondary,
+html[data-bs-theme] .patient-dashboard-container #appointments-content .badge.bg-secondary {
+    background-color: #495057 !important;
+}
+
+/* Dark text on yellow warning badges */
+html[data-bs-theme] .patient-dashboard-container #recent-triage-content .badge.bg-warning,
+html[data-bs-theme] .patient-dashboard-container #appointments-content .badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #111827 !important;
+    -webkit-text-fill-color: #111827 !important;
+}
 </style>
 @endpush
 
