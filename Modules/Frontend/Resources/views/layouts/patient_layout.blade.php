@@ -633,7 +633,34 @@ html[data-bs-theme="dark"] .patient-dashboard-container .btn-outline-secondary:f
     border-color: #e63732 !important;
     background-color: #e63732 !important;
 }
+
+            /* <!-- badges text color --> */
+
+        /* High-contrast appointment status badges */
+#patient-section-records .badge,
+#patient-section-records .badge * {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 0.875rem !important;
+    line-height: 1.4 !important;
+}
+
+/* Stronger red for red status badges */
+#patient-section-records .badge.bg-danger,
+#patient-section-records .badge.bg-primary {
+    background-color: #a60000 !important;
+}
+
+/* Dark text on yellow badges for strong contrast */
+#patient-section-records .badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #111827 !important;
+}
+
     </style>
+
+
+    
 </head>
 
 <body class="patient-dashboard-container">
