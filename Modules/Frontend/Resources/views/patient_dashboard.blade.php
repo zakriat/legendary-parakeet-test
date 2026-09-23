@@ -176,33 +176,78 @@
 /* dark moode fixes */
 
     /* Patient navigation: readable inactive tabs */
-.patient-overview-tab .nav-link:not(.active),
+/* .patient-overview-tab .nav-link:not(.active),
 .patient-overview-tab .nav-link:not(.active) span,
 .patient-overview-tab .nav-link:not(.active) i,
 .patient-overview-tab .nav-link:not(.active) svg {
     color: #e2e8f0 !important;
     opacity: 1 !important;
-}
+} */
 
 /* Keep hover state readable */
-.patient-overview-tab .nav-link:not(.active):hover,
+/* .patient-overview-tab .nav-link:not(.active):hover,
 .patient-overview-tab .nav-link:not(.active):hover span,
 .patient-overview-tab .nav-link:not(.active):hover i {
     color: #ffffff !important;
-}
+} */
 
 /* Brighten icons inside the four statistics cards */
-.stats-card .stats-icon i,
+/* .stats-card .stats-icon i,
 .stats-card .stats-icon svg {
     color: #ffffff !important;
     opacity: 1 !important;
-}
+} */
 
 /* Keep stat labels and numbers readable */
-.stats-card h3,
+/* .stats-card h3,
 .stats-card p {
     color: #212529 !important;
+} */
+
+
+    /* dim writeing and icon fixes */
+/* Light mode: dark text on inactive tabs and colored stat icons */
+html[data-bs-theme="light"] .patient-overview-tab .nav-link:not(.active),
+html[data-bs-theme="light"] .patient-overview-tab .nav-link:not(.active) span,
+html[data-bs-theme="light"] .patient-overview-tab .nav-link:not(.active) i {
+    color: #495057 !important;
 }
+
+html[data-bs-theme="light"] .stats-card .stats-icon i,
+html[data-bs-theme="light"] .stats-card .stats-icon svg {
+    color: var(--bs-primary) !important;
+}
+
+html[data-bs-theme="light"] .stats-card:nth-of-type(2) .stats-icon i,
+html[data-bs-theme="light"] .stats-card:nth-of-type(2) .stats-icon svg {
+    color: #b77900 !important;
+}
+
+html[data-bs-theme="light"] .stats-card:nth-of-type(3) .stats-icon i,
+html[data-bs-theme="light"] .stats-card:nth-of-type(3) .stats-icon svg {
+    color: #198754 !important;
+}
+
+html[data-bs-theme="light"] .stats-card:nth-of-type(4) .stats-icon i,
+html[data-bs-theme="light"] .stats-card:nth-of-type(4) .stats-icon svg {
+    color: #0d6efd !important;
+}
+
+/* Dark mode: keep inactive tab labels and icons bright */
+html[data-bs-theme="dark"] .patient-overview-tab .nav-link:not(.active),
+html[data-bs-theme="dark"] .patient-overview-tab .nav-link:not(.active) span,
+html[data-bs-theme="dark"] .patient-overview-tab .nav-link:not(.active) i,
+html[data-bs-theme="dark"] .stats-card .stats-icon i,
+html[data-bs-theme="dark"] .stats-card .stats-icon svg {
+    color: #e2e8f0 !important;
+}
+
+/* Active tab text stays white in both modes */
+.patient-overview-tab .nav-link.active,
+.patient-overview-tab .nav-link.active * {
+    color: #ffffff !important;
+}
+    
 </style>
 @endpush
 
